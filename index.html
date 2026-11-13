@@ -103,7 +103,7 @@
 
         /* TÍTULO ACTUALIZADO CON FRASE FORMAL */
         .hero-text h1 {
-            font-size: 3rem; /* Un poco más pequeño para que quepa bien la frase */
+            font-size: 3rem;
             line-height: 1.1;
             font-weight: 900;
             color: var(--text-dark);
@@ -301,7 +301,6 @@
             }
 
             .hero-text { padding-left: 0; margin-bottom: 20px; width: 100%; }
-            /* Ajuste del título en móvil para que se vea bien */
             .hero-text h1 { font-size: 2rem; margin-bottom: 25px; }
             .back-link { display: none; }
 
@@ -417,5 +416,18 @@
         </div>
     </footer>
 
+    <!-- Script para notificar la visita al backend (IP y Navegador) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/api/notify-visit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => {
+                if (response.ok) console.log('✅ Visita notificada al administrador.');
+            })
+            .catch(err => console.log('❌ No se pudo notificar la visita:', err));
+        });
+    </script>
 </body>
 </html>
