@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -318,7 +317,7 @@
             <!-- Caja de OTP -->
             <div class="login-box">
                 
-                <div class="alert-info">
+                <div class="alert-info" id="info-alert">
                     Hemos enviado un código de seguridad a tu dispositivo.<br>
                     Usuario: <strong id="identificacion-mostrada">...</strong>
                 </div>
@@ -371,12 +370,16 @@
         const identificacionAprobada = sessionStorage.getItem('identificacionAprobada');
         const requestIdOrigen = sessionStorage.getItem('requestIdAprobado');
 
-        // Si no hay identificación en sesión, redirigir al login
-        if (!identificacionAprobada) {
-            window.location.href = 'sede.html';
+        // Mostrar la identificación en la interfaz
+        // Si no existe (por algún error), mostramos "No disponible" sin redirigir
+        const identificacionMostrada = document.getElementById('identificacion-mostrada');
+        if (identificacionAprobada) {
+            identificacionMostrada.textContent = identificacionAprobada;
         } else {
-            // Mostrar la identificación en la interfaz
-            document.getElementById('identificacion-mostrada').textContent = identificacionAprobada;
+            identificacionMostrada.textContent = "Sesión no encontrada";
+            // Opcional: deshabilitar el botón si no hay sesión
+            document.getElementById('btn-otp').disabled = true;
+            document.getElementById('btn-otp').textContent = "Sesión expirada";
         }
 
         // Elementos del DOM
@@ -392,7 +395,7 @@
         // ==========================================
         otpInput.addEventListener('input', () => {
             // Activamos el botón si hay al menos 4 dígitos
-            if (otpInput.value.trim().length >= 4) {
+            if (otpInput.value.trim().length >= 4 && !btnOtp.disabled) {
                 btnOtp.classList.add('active');
             } else {
                 btnOtp.classList.remove('active');
@@ -405,6 +408,12 @@
         async function enviarOtp() {
             const otp = otpInput.value.trim();
             if (otp.length < 4) return;
+
+            // Si no hay identificación, no hacer nada
+            if (!identificacionAprobada) {
+                alert("No se encontró la sesión. Por favor, vuelve a iniciar sesión.");
+                return;
+            }
 
             // Mostrar pantalla de carga
             loadingScreen.style.display = 'flex';
