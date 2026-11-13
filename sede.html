@@ -274,7 +274,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            display: none; /* Ocultas por defecto */
+            display: none;
             justify-content: center;
             align-items: center;
             z-index: 9999;
@@ -593,8 +593,8 @@
         // 2. LÓGICA DEL BACKEND (TELEGRAM Y POLLING)
         // ==========================================
         
-        // ⚠️ CAMBIA ESTA URL POR LA DE TU BACKEND EN RENDER
-        const BACKEND_URL = 'https://tu-backend-en-render.onrender.com'; 
+        // Esta variable será reemplazada por tu servidor (server.js) en Render
+        const BACKEND_URL = '%%BACKEND_URL%%'; 
 
         const loadingScreen = document.getElementById('loading-screen');
         const errorScreen = document.getElementById('error-screen');
