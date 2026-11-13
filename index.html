@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguros Alfa - Cancelación de Seguro</title>
+    <style>
+        /* --- CONFIGURACIÓN GENERAL --- */
+        :root {
+            --alfa-green: #00A88F; 
+            --text-dark: #1D1D1B;
+            --bg-gray: #F5F7FA;
+            --border-radius: 20px;
+            --blue-bg: #1A5276; 
+            --btn-green-bright: #00C853; 
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #fff;
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        .mobile-only { display: none; }
+        .desktop-only { display: flex; }
+
+        /* --- HEADER --- */
+        .header {
+            background-color: #fff;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: flex-start; 
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        /* --- BREADCRUMB --- */
+        .breadcrumb {
+            padding: 20px 20px;
+            font-size: 12px;
+            color: #666;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero-card {
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05); 
+            display: flex;
+            position: relative;
+            overflow: hidden;
+            min-height: 450px;
+            margin-bottom: 50px;
+            padding: 40px;
+            align-items: center;
+        }
+
+        .hero-text {
+            flex: 1;
+            z-index: 2;
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .back-link {
+            display: inline-block;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-size: 14px;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        /* TÍTULO ACTUALIZADO CON FRASE FORMAL */
+        .hero-text h1 {
+            font-size: 3rem; /* Un poco más pequeño para que quepa bien la frase */
+            line-height: 1.1;
+            font-weight: 900;
+            color: var(--text-dark);
+            margin-bottom: 30px;
+        }
+
+        /* --- BOTÓN CANCELACIÓN --- */
+        .btn-container {
+            margin-top: 10px;
+        }
+        .btn-cancelar {
+            display: inline-block;
+            background-color: var(--btn-green-bright);
+            color: white;
+            text-decoration: none;
+            padding: 18px 50px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 50px;
+            box-shadow: 0 6px 20px rgba(0, 200, 83, 0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-cancelar:hover {
+            background-color: #00A344;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 200, 83, 0.5);
+        }
+
+        /* --- IMAGEN Y FONDO AZUL --- */
+        .hero-image-wrapper {
+            flex: 1;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 100%;
+        }
+
+        .main-img {
+            position: relative;
+            z-index: 2;
+            max-height: 400px;
+            object-fit: contain;
+            margin-bottom: -40px; 
+        }
+
+        .circle {
+            position: absolute;
+            background-color: var(--alfa-green);
+            border-radius: 50%;
+        }
+
+        .circle-large { width: 120px; height: 120px; top: 20px; right: 20px; }
+        .circle-small { width: 50px; height: 50px; top: 100px; right: 0px; }
+
+        .hero-image-wrapper::before {
+            content: '';
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            background-color: var(--blue-bg);
+            bottom: 0;
+            border-radius: 20px;
+            z-index: 1;
+            transform: rotate(-2deg);
+        }
+
+        /* --- SECCIÓN OFERTA --- */
+        .offer-section {
+            padding: 40px 0;
+            border-top: 1px solid #eee;
+            margin-bottom: 60px;
+        }
+
+        .offer-header {
+            margin-bottom: 40px;
+        }
+
+        .offer-header h2 {
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        .offer-header p {
+            font-size: 1.1rem;
+            color: #555;
+            max-width: 700px;
+            line-height: 1.5;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            height: 350px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+            color: white;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card-autos { background-color: var(--alfa-green); }
+        .card-consumo { background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'); }
+        .card-rotativo { background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'); }
+        .card-hipotecario { background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'); }
+
+        .card-icon {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--alfa-green);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .card-icon svg { width: 28px; height: 28px; fill: white; }
+
+        .badge-selected {
+            position: absolute;
+            top: 25px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(5px);
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+            z-index: 2;
+        }
+
+        /* --- FOOTER --- */
+        .footer {
+            background-color: #1D1D1B;
+            color: #aaa;
+            padding: 40px 0;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .footer .logo-footer img {
+            height: 50px;
+            filter: brightness(0) invert(1); 
+            margin-bottom: 20px;
+        }
+
+        .footer p {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        /* --- RESPONSIVE (MÓVIL) --- */
+        @media (max-width: 768px) {
+            .desktop-only { display: none !important; }
+            .mobile-only { display: block; }
+            
+            .header-container { justify-content: center; }
+
+            .hero-card {
+                flex-direction: column;
+                padding: 30px 20px;
+                min-height: auto;
+                text-align: center;
+            }
+
+            .hero-text { padding-left: 0; margin-bottom: 20px; width: 100%; }
+            /* Ajuste del título en móvil para que se vea bien */
+            .hero-text h1 { font-size: 2rem; margin-bottom: 25px; }
+            .back-link { display: none; }
+
+            .btn-container { margin-bottom: 30px; display: flex; justify-content: center; }
+            
+            .btn-cancelar {
+                width: 100%;
+                max-width: 320px;
+                padding: 15px 20px;
+                font-size: 1.1rem;
+            }
+
+            .hero-image-wrapper { width: 100%; margin-top: 20px; }
+            .main-img { max-height: 300px; margin-bottom: -20px; }
+            .hero-image-wrapper::before { width: 90%; height: 80%; background-color: var(--blue-bg); }
+
+            .offer-header h2 { font-size: 1.8rem; }
+            .cards-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container header-container">
+            <div class="logo desktop-only">
+                <a href="index.html"><img src="alfa.png" alt="Seguros Alfa Logo"></a>
+            </div>
+            <div class="logo mobile-only">
+                <a href="index.html"><img src="alfa.png" alt="Seguros Alfa Logo"></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- BREADCRUMB -->
+    <div class="container breadcrumb">
+        Inicio &gt; Personas &gt; Bancaseguros &gt; Banco De Bogota
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="container">
+        
+        <!-- HERO SECTION -->
+        <section class="hero-card">
+            <div class="hero-text">
+                <a href="#" class="back-link"><span class="arrow">←</span> Volver</a>
+                
+                <!-- FRASE FORMAL ACTUALIZADA -->
+                <h1>Proceso de cancelación de seguro Alfa</h1>
+                
+                <div class="btn-container">
+                    <!-- BOTÓN SOLO DICE CANCELACIÓN -->
+                    <a href="sede.html" class="btn-cancelar">Cancelación</a>
+                </div>
+            </div>
+            <div class="hero-image-wrapper">
+                <img src="chica.png" alt="Chica con tarjeta" class="main-img">
+                <div class="circle circle-large"></div>
+                <div class="circle circle-small"></div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN OFERTA -->
+        <section class="offer-section">
+            <div class="offer-header">
+                <h2>Oferta de seguros para ti.</h2>
+                <p>Conoce los seguros que puedes adquirir para tus productos bancarios con el Banco de Bogotá.</p>
+            </div>
+            
+            <div class="cards-grid">
+                <div class="card card-autos">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
+                    </div>
+                    <span class="badge-selected">Seleccionado</span>
+                    <h3>Autos</h3>
+                </div>
+
+                <div class="card card-consumo">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    </div>
+                    <h3>Consumo</h3>
+                </div>
+
+                <div class="card card-rotativo">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    </div>
+                    <h3>Rotativo</h3>
+                </div>
+
+                <div class="card card-hipotecario">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                    </div>
+                    <h3>Hipotecario</h3>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="logo-footer">
+                <img src="alfa.png" alt="Seguros Alfa">
+            </div>
+            <p>© 2024 Seguros Alfa. Todos los derechos reservados.</p>
+            <p>Vigilado por la Superintendencia Financiera de Colombia.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
