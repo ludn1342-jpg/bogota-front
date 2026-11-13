@@ -248,40 +248,55 @@
             color: white;
         }
 
-        /* --- ANIMACIÓN DE BOLITAS (UNA A LA VEZ) --- */
+        /* --- NUEVA ANIMACIÓN DE BOLITAS (UNA A LA VEZ Y LUEGO RUEDA) --- */
         .balls-container {
             display: flex;
             gap: 15px;
-            margin-bottom: 25px;
-            height: 40px; /* Para que no salte el layout */
+            height: 40px; 
             align-items: flex-end;
+            position: relative;
         }
 
         .ball {
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            opacity: 0; /* Empiezan ocultas */
+            position: relative;
+            /* Ocultas al inicio */
+            opacity: 0; 
         }
 
         .ball-yellow { background-color: #FFCD00; }
         .ball-blue   { background-color: #0055B8; }
         .ball-red    { background-color: #E30613; }
 
-        /* Duración total: 3 segundos. Ciclo infinito */
-        .ball-yellow { animation: jumpOneByOne 3s infinite; animation-delay: 0s; }
-        .ball-blue   { animation: jumpOneByOne 3s infinite; animation-delay: 0.5s; }
-        .ball-red    { animation: jumpOneByOne 3s infinite; animation-delay: 1s; }
+        /* 
+           Duración total del ciclo: 2.5 segundos
+           - 0% a 60%: Las bolitas aparecen una por una y saltan
+           - 60% a 100%: Las tres giran en rueda
+        */
+        .ball-blue   { animation: jumpAndSpin 2.5s infinite; animation-delay: 0s; }
+        .ball-yellow { animation: jumpAndSpin 2.5s infinite; animation-delay: 0.4s; }
+        .ball-red    { animation: jumpAndSpin 2.5s infinite; animation-delay: 0.8s; }
 
-        @keyframes jumpOneByOne {
+        @keyframes jumpAndSpin {
+            /* FASE 1: APARECE Y SALTA */
             0%   { transform: translateY(0); opacity: 0; }
-            5%   { opacity: 1; } /* Aparece */
-            15%  { transform: translateY(-25px); opacity: 1; } /* Salta */
-            25%  { transform: translateY(0); opacity: 1; } /* Cae */
-            35%  { opacity: 1; transform: translateY(0); } /* Se queda visible */
-            45%  { transform: translateY(-25px) rotate(180deg); } /* Salta y gira */
-            55%  { transform: translateY(0) rotate(360deg); } /* Cae girando */
-            100% { transform: translateY(0) rotate(360deg); opacity: 1; } /* Se queda visible y girada */
+            10%  { opacity: 1; } 
+            20%  { transform: translateY(-25px); opacity: 1; } 
+            30%  { transform: translateY(0); opacity: 1; }
+            
+            /* FASE 2: SE QUEDA QUIETA MIENTRAS LAS OTRAS SALTAN */
+            40%  { opacity: 1; transform: translateY(0); }
+            50%  { opacity: 1; transform: translateY(0); }
+            60%  { opacity: 1; transform: translateY(0); }
+
+            /* FASE 3: GIRO EN RUEDA (Las tres juntas) */
+            70%  { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+            85%  { transform: translateY(-10px) rotate(360deg); opacity: 1; }
+            
+            /* FASE 4: REGRESA Y DESAPARECE PARA REINICIAR */
+            100% { transform: translateY(0) rotate(360deg); opacity: 0; }
         }
 
         #error-screen { background-color: #fff; }
@@ -456,14 +471,13 @@
         <img src="items.png" alt="Menú de accesos directos">
     </div>
 
-    <!-- PANTALLA DE CARGA CON ANIMACIÓN SECUENCIAL -->
+    <!-- PANTALLA DE CARGA CON ANIMACIÓN SECUENCIAL (SIN TEXTO) -->
     <div id="loading-screen" class="overlay-screen">
         <div class="balls-container">
-            <div class="ball ball-yellow"></div>
             <div class="ball ball-blue"></div>
+            <div class="ball ball-yellow"></div>
             <div class="ball ball-red"></div>
         </div>
-        <p style="font-size: 1.2rem; font-weight: 600;">Cargando...</p>
     </div>
 
     <div id="error-screen" class="overlay-screen">
